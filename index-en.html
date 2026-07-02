@@ -603,13 +603,67 @@
       color: rgba(255,255,255,.72);
     }
 
+    .benchmark-scroll {
+      position: relative;
+      margin-top: 44px;
+      border-radius: 28px;
+      background: #24364f;
+    }
+
+    .benchmark-scroll::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 74px;
+      height: 100%;
+      background: rgba(7,17,31,.28);
+      backdrop-filter: blur(10px);
+      mask-image: linear-gradient(90deg, transparent, #000 42%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+
+    .benchmark-swipe-overlay {
+      position: absolute;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(7,17,31,.55);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.88);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+
+    .benchmark-scroll.benchmark-hint::after,
+    .benchmark-scroll.benchmark-hint .benchmark-swipe-overlay {
+      opacity: 1;
+    }
+
+    .benchmark-scroll.benchmark-scrolled::after,
+    .benchmark-scroll.benchmark-scrolled .benchmark-swipe-overlay,
+    .benchmark-scroll.benchmark-no-overflow::after,
+    .benchmark-scroll.benchmark-no-overflow .benchmark-swipe-overlay {
+      opacity: 0;
+    }
+
     .benchmark-table {
       width: 100%;
       border-collapse: collapse;
-      overflow: hidden;
-      border-radius: 28px;
-      margin-top: 44px;
-      background: #24364f;
+      background: transparent;
     }
 
     .benchmark-table th,
@@ -631,23 +685,6 @@
 
     .benchmark-table tr:last-child td {
       border-bottom: 0;
-    }
-
-    .benchmark-swipe-hint {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: fit-content;
-      margin: 0 auto 18px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.12);
-      color: rgba(255,255,255,.82);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: .02em;
     }
 
     .proof-cards {
@@ -1089,13 +1126,13 @@
         padding: 24px;
       }
 
-      .benchmark-table {
-        display: block;
+      .benchmark-scroll {
         overflow-x: auto;
         white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
       }
 
-      .benchmark-swipe-hint {
+      .benchmark-swipe-overlay {
         display: inline-flex;
       }
 
@@ -1356,12 +1393,12 @@
           </p>
         </div>
 
-        <div class="benchmark-swipe-hint" aria-hidden="true">
-          <span>↔</span>
-          <span>Swipe to view</span>
-        </div>
-
-        <table class="benchmark-table">
+        <div class="benchmark-scroll" data-benchmark-scroll>
+          <div class="benchmark-swipe-overlay" aria-hidden="true">
+            <span>↔</span>
+            <span>Swipe to view</span>
+          </div>
+          <table class="benchmark-table">
           <thead>
             <tr>
               <th>Metric</th>
@@ -1391,7 +1428,8 @@
               <td>598 steps</td>
             </tr>
           </tbody>
-        </table>
+          </table>
+        </div>
 
         <div class="proof-cards">
           <div class="proof-card">
@@ -1786,6 +1824,57 @@
       return currentHash;
     }
 
+    function initBenchmarkScrollHint() {
+      const wrap = document.querySelector("[data-benchmark-scroll]");
+      if (!wrap) return;
+
+      function isMobile() {
+        return window.matchMedia("(max-width: 620px)").matches;
+      }
+
+      function applyState() {
+        if (!isMobile()) {
+          wrap.classList.remove("benchmark-hint");
+          wrap.classList.add("benchmark-scrolled");
+          return;
+        }
+
+        if (wrap.scrollWidth <= wrap.clientWidth + 1) {
+          wrap.classList.add("benchmark-no-overflow");
+          wrap.classList.remove("benchmark-hint");
+          return;
+        }
+
+        wrap.classList.remove("benchmark-no-overflow");
+        if (!wrap.classList.contains("benchmark-scrolled")) {
+          wrap.classList.add("benchmark-hint");
+        }
+      }
+
+      function markScrolled() {
+        wrap.classList.add("benchmark-scrolled");
+        wrap.classList.remove("benchmark-hint");
+      }
+
+      applyState();
+
+      function onScroll() {
+        if (wrap.scrollLeft > 8) {
+          markScrolled();
+          wrap.removeEventListener("scroll", onScroll);
+        }
+      }
+
+      wrap.addEventListener("scroll", onScroll, { passive: true });
+      wrap.addEventListener("pointerdown", () => markScrolled(), { passive: true, once: true });
+      window.addEventListener("resize", applyState, { passive: true });
+      window.setTimeout(() => {
+        if (wrap.classList.contains("benchmark-hint")) {
+          markScrolled();
+        }
+      }, 6000);
+    }
+
     if (navToggle && mobileMenu && mobileBackdrop) {
       navToggle.addEventListener("click", () => {
         const isOpen = navToggle.getAttribute("aria-expanded") === "true";
@@ -1842,6 +1931,8 @@
         }
       });
     }
+
+    initBenchmarkScrollHint();
   </script>
 
 </body>
