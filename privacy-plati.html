@@ -35,10 +35,10 @@
     a { color: inherit; text-decoration: none; }
     .container { width: min(var(--max), calc(100% - 48px)); margin: 0 auto; }
 
-    .nav {
+    .navbar {
       position: sticky;
       top: 0;
-      z-index: 80;
+      z-index: 100;
       background: rgba(246, 246, 244, 0.92);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(7,17,31,.08);
@@ -53,91 +53,85 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      font-size: 24px;
-      font-style: italic;
-      white-space: nowrap;
-    }
-    .brand-mark {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background:
-        linear-gradient(135deg, rgba(72,173,103,.9), rgba(7,17,31,.96)),
-        radial-gradient(circle at 30% 28%, #fff, transparent 40%);
-      box-shadow: inset 0 0 0 2px rgba(255,255,255,.15), 0 12px 28px rgba(7,17,31,.16);
-      position: relative;
-      overflow: hidden;
-    }
-    .brand-mark::after {
-      content: "";
-      position: absolute;
-      inset: 8px;
-      border: 1px solid rgba(255,255,255,.45);
-      border-radius: 5px;
-      transform: rotate(45deg);
-    }
-    .brand-os { color: var(--green); font-size: 15px; margin-left: 2px; font-style: normal; }
-    .nav-links { display: flex; align-items: center; gap: 26px; font-size: 15px; color: #282532; }
-    .nav-links a { opacity: .82; }
-    .nav-links a:hover { opacity: 1; color: var(--green); }
-    .nav-cta {
-      opacity: 1 !important;
-      padding: 11px 17px;
-      border-radius: 999px;
-      background: var(--green-dark);
-      color: white !important;
-      font-weight: 800;
-      box-shadow: 0 12px 24px rgba(39,95,82,.16);
+      flex: 0 0 auto;
     }
 
-    .lang-switcher { position: relative; margin-left: 4px; }
-    .lang {
-      appearance: none;
-      height: 42px;
-      padding: 0 14px;
+    .brand-logo {
+      width: auto;
+      height: 38px;
+      max-width: min(34vw, 360px);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 auto;
+      gap: 28px;
+      font-size: 15px;
+      color: #282532;
+    }
+
+    .nav-links a:hover { color: var(--green); }
+
+    .nav-cta {
+      padding: 12px 18px;
       border-radius: 999px;
-      border: 1px solid rgba(7,17,31,.14);
-      background: rgba(255,255,255,.78);
-      color: #0b0f0f;
+      background: var(--green-dark);
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 12px 24px rgba(39, 95, 82, 0.18);
+    }
+
+    .nav-side {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 0 0 auto;
+    }
+
+    .lang-switcher { position: relative; }
+    .lang {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-weight: 800;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid rgba(7, 17, 31, 0.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.88);
+      color: var(--text);
+      font: inherit;
       font-size: 14px;
+      font-weight: 800;
       cursor: pointer;
+      transition: .2s ease;
     }
-    .lang-caret { color: rgba(11,15,15,.55); font-size: 12px; transition: transform .15s ease; }
-    .lang-switcher.open .lang-caret { transform: rotate(180deg); }
+    .lang:hover { border-color: rgba(39,95,82,.3); color: var(--green-dark); }
+    .lang-caret { font-size: 14px; line-height: 1; transition: transform .2s ease; }
+    .lang[aria-expanded="true"] .lang-caret { transform: rotate(180deg); }
     .lang-menu {
       position: absolute;
       top: calc(100% + 10px);
       right: 0;
-      min-width: 190px;
+      min-width: 160px;
       padding: 8px;
-      border-radius: 18px;
-      border: 1px solid var(--border);
       background: rgba(255,255,255,.98);
-      box-shadow: 0 24px 80px rgba(7,17,31,.18);
-      display: grid;
-      gap: 6px;
-      z-index: 85;
+      border: 1px solid rgba(7, 17, 31, 0.08);
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(7,17,31,.12);
     }
     .lang-menu[hidden], .mobile-backdrop[hidden], .mobile-menu[hidden] { display: none; }
     .lang-menu a {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px;
-      border-radius: 14px;
-      color: #0b0f0f;
+      display: block;
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: var(--text);
       font-size: 14px;
-      font-weight: 800;
-      border: 1px solid transparent;
+      font-weight: 700;
     }
-    .lang-menu a:hover, .lang-menu a.active { background: rgba(72,173,103,.08); border-color: rgba(72,173,103,.16); }
+    .lang-menu a:hover { background: rgba(72,173,103,.10); color: var(--green-dark); }
+    .lang-menu a[aria-current="page"] { background: var(--green-soft); color: var(--green-dark); }
 
     .nav-toggle {
       display: none;
@@ -323,7 +317,7 @@
     .footer-contact { text-align: right; font-size: 15px; color: var(--muted); }
     .footer-contact p { margin-bottom: 4px; color: var(--muted); }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1050px) {
       .nav-links { display: none; }
       .nav-toggle { display: inline-flex; }
       .legal-grid { grid-template-columns: 1fr; gap: 0; }
@@ -334,9 +328,9 @@
     }
     @media (max-width: 620px) {
       .container { width: min(100% - 28px, var(--max)); }
-      .nav-inner { height: 72px; }
-      .brand { font-size: 18px; }
-      .brand-mark { width: 34px; height: 34px; }
+      .nav-inner { height: 70px; }
+      .brand { max-width: 58vw; }
+      .brand-logo { height: 30px; max-width: 100%; }
       .legal-hero { padding: 72px 0 52px; }
       .legal-body { padding: 46px 0 70px; }
       h1 { font-size: 42px; }
@@ -346,47 +340,51 @@
 </head>
 
 <body>
-  <header class="nav">
+  <header class="navbar">
     <div class="container nav-inner">
-      <a class="brand" href="index.html" aria-label="PLATI STARS OS inicio">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span>PLATI STARS <span class="brand-os">OS</span></span>
+      <a class="brand" href="/home#hero" aria-label="PLATI STARS OS inicio">
+        <img class="brand-logo" src="PLATI STARS OS_Logotipo_2 (1).png" alt="PLATI STARS OS" />
       </a>
 
-      <nav class="nav-links" aria-label="Navegación principal">
-        <a href="index.html">Inicio</a>
-        <a href="index.html#tecnologia">Tecnología</a>
-        <a href="index.html#benchmark">Benchmark</a>
-        <a href="index.html#aplicaciones">Aplicaciones</a>
-        <a href="index.html#evaluacion">Evaluación</a>
-        <a href="index.html#contacto" class="nav-cta">Solicitar evaluación</a>
+      <nav class="nav-links">
+        <a href="/home#que-es">Qué es</a>
+        <a href="/home#tecnologia">Tecnología</a>
+        <a href="/home#benchmark">Benchmark</a>
+        <a href="/home#aplicaciones">Aplicaciones</a>
+        <a href="/home#evaluacion">Evaluación</a>
+        <a href="/home#contacto">Contacto</a>
+        <a class="nav-cta" href="/home#contacto">Solicitar evaluación</a>
       </nav>
 
-      <div class="lang-switcher" id="langSwitcher">
-        <button class="lang" type="button" aria-label="Seleccionar idioma" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu" id="langToggle">
-          <span>ES</span>
-          <span class="lang-caret" aria-hidden="true">⌄</span>
-        </button>
-        <div class="lang-menu" id="langMenu" hidden>
-          <a href="/privacy" class="active"><span>Español</span></a>
-          <a href="/privacy-en"><span>English</span></a>
+      <div class="nav-side">
+        <div class="lang-switcher">
+          <button class="lang" type="button" aria-label="Seleccionar idioma" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu" id="langToggle">
+            <span>ES</span>
+            <span class="lang-caret" aria-hidden="true">⌄</span>
+          </button>
+          <div class="lang-menu" id="langMenu" hidden>
+            <a href="/privacy" aria-current="page">Español</a>
+            <a href="/privacy-en">English</a>
+          </div>
         </div>
-      </div>
 
-      <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" aria-controls="mobileMenu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" aria-controls="mobileMenu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </header>
 
   <div class="mobile-backdrop" id="mobileBackdrop" hidden></div>
   <div class="mobile-menu" id="mobileMenu" hidden>
-    <a href="index.html">Inicio</a>
-    <a href="index.html#tecnologia">Tecnología</a>
-    <a href="index.html#benchmark">Benchmark</a>
-    <a href="index.html#aplicaciones">Aplicaciones</a>
-    <a href="index.html#evaluacion">Evaluación</a>
-    <a href="index.html#contacto" class="mobile-cta">Solicitar evaluación</a>
+    <a href="/home#que-es">Qué es</a>
+    <a href="/home#tecnologia">Tecnología</a>
+    <a href="/home#benchmark">Benchmark</a>
+    <a href="/home#aplicaciones">Aplicaciones</a>
+    <a href="/home#evaluacion">Evaluación</a>
+    <a href="/home#contacto">Contacto</a>
+    <a href="/privacy" aria-current="page">Privacidad</a>
+    <a href="/home#contacto" class="mobile-cta">Solicitar evaluación</a>
   </div>
 
   <main>
@@ -599,14 +597,13 @@
       backdrop.addEventListener("click", function () { setOpen(false); });
       menu.addEventListener("click", function (e) { if (e.target.closest("a")) setOpen(false); });
       document.addEventListener("keydown", function (e) { if (e.key === "Escape") setOpen(false); });
-      window.addEventListener("resize", function () { if (window.innerWidth > 900) setOpen(false); });
+      window.addEventListener("resize", function () { if (window.innerWidth > 1050) setOpen(false); });
     })();
 
     (function () {
-      var switcher = document.getElementById("langSwitcher");
       var toggle = document.getElementById("langToggle");
       var menu = document.getElementById("langMenu");
-      if (!switcher || !toggle || !menu) return;
+      if (!toggle || !menu) return;
 
       function getCurrentSectionHash() {
         var sections = Array.from(document.querySelectorAll("main section[id], section[id]"));
@@ -624,12 +621,10 @@
 
       function close() {
         menu.hidden = true;
-        switcher.classList.remove("open");
         toggle.setAttribute("aria-expanded", "false");
       }
       function open() {
         menu.hidden = false;
-        switcher.classList.add("open");
         toggle.setAttribute("aria-expanded", "true");
       }
       toggle.addEventListener("click", function () { menu.hidden ? open() : close(); });
@@ -646,7 +641,7 @@
         close();
         window.location.href = targetUrl.toString();
       });
-      document.addEventListener("click", function (e) { if (!switcher.contains(e.target)) close(); });
+      document.addEventListener("click", function (e) { if (!e.target.closest(".lang-switcher")) close(); });
       document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
     })();
   </script>
