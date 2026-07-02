@@ -609,8 +609,6 @@
       if (!switcher || !toggle || !menu) return;
 
       function getCurrentSectionHash() {
-        if (window.location.hash) return window.location.hash;
-
         var sections = Array.from(document.querySelectorAll("main section[id], section[id]"));
         var scrollPosition = window.scrollY + 140;
         var currentHash = "";

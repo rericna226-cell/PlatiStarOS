@@ -190,8 +190,71 @@
       color: var(--green-dark);
     }
 
-    .mobile-note {
+    .nav-toggle {
       display: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid rgba(7,17,31,.14);
+      background: rgba(255,255,255,.78);
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      width: 20px;
+      height: 2px;
+      background: rgba(7,17,31,.92);
+      border-radius: 999px;
+      display: block;
+    }
+
+    .mobile-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(7,17,31,.18);
+      backdrop-filter: blur(2px);
+      z-index: 90;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 86px;
+      left: 14px;
+      right: 14px;
+      background: rgba(255,255,255,.98);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 28px 90px rgba(7,17,31,.20);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      z-index: 95;
+    }
+
+    .mobile-menu[hidden],
+    .mobile-backdrop[hidden] {
+      display: none;
+    }
+
+    .mobile-menu a {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 15px;
+      background: rgba(7,17,31,.035);
+      border: 1px solid rgba(7,17,31,.06);
+    }
+
+    .mobile-menu a.mobile-cta {
+      background: var(--green-dark);
+      color: white;
+      border-color: var(--green-dark);
     }
 
     /* GENERAL */
@@ -933,10 +996,8 @@
         display: none;
       }
 
-      .mobile-note {
-        display: block;
-        font-size: 14px;
-        color: var(--muted);
+      .nav-toggle {
+        display: inline-flex;
       }
 
       .metrics,
@@ -1056,10 +1117,23 @@
             <a href="/home-en" role="menuitem">English</a>
           </div>
         </div>
-        <div class="mobile-note">Menú</div>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" aria-controls="mobileMenu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </header>
+
+  <div class="mobile-backdrop" id="mobileBackdrop" hidden></div>
+  <div class="mobile-menu" id="mobileMenu" hidden>
+    <a href="#que-es">Qué es</a>
+    <a href="#tecnologia">Tecnología</a>
+    <a href="#benchmark">Benchmark</a>
+    <a href="#aplicaciones">Aplicaciones</a>
+    <a href="#evaluacion">Evaluación</a>
+    <a href="#contacto">Contacto</a>
+    <a href="#contacto" class="mobile-cta">Solicitar evaluación</a>
+  </div>
 
   <!-- HERO -->
   <main>
@@ -1647,8 +1721,20 @@
   </footer>
 
   <script>
+    const navToggle = document.getElementById("navToggle");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const mobileBackdrop = document.getElementById("mobileBackdrop");
     const langToggle = document.getElementById("langToggle");
     const langMenu = document.getElementById("langMenu");
+
+    function setMobileMenuOpen(isOpen) {
+      if (!navToggle || !mobileMenu || !mobileBackdrop) return;
+
+      navToggle.setAttribute("aria-expanded", String(isOpen));
+      mobileMenu.hidden = !isOpen;
+      mobileBackdrop.hidden = !isOpen;
+      document.body.classList.toggle("menu-open", isOpen);
+    }
 
     function closeLangMenu() {
       langToggle.setAttribute("aria-expanded", "false");
@@ -1656,10 +1742,6 @@
     }
 
     function getCurrentSectionHash() {
-      if (window.location.hash) {
-        return window.location.hash;
-      }
-
       const sections = Array.from(document.querySelectorAll("main section[id], section[id]"));
       const scrollPosition = window.scrollY + 140;
       let currentHash = "";
@@ -1670,7 +1752,34 @@
         }
       });
 
+      if (currentHash === "#hero") {
+        return "";
+      }
+
       return currentHash;
+    }
+
+    if (navToggle && mobileMenu && mobileBackdrop) {
+      navToggle.addEventListener("click", () => {
+        const isOpen = navToggle.getAttribute("aria-expanded") === "true";
+        setMobileMenuOpen(!isOpen);
+      });
+
+      mobileBackdrop.addEventListener("click", () => {
+        setMobileMenuOpen(false);
+      });
+
+      mobileMenu.addEventListener("click", (event) => {
+        if (event.target.closest("a")) {
+          setMobileMenuOpen(false);
+        }
+      });
+
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 1050) {
+          setMobileMenuOpen(false);
+        }
+      });
     }
 
     if (langToggle && langMenu) {
@@ -1701,6 +1810,7 @@
 
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
+          setMobileMenuOpen(false);
           closeLangMenu();
         }
       });
