@@ -607,6 +607,23 @@
       var toggle = document.getElementById("langToggle");
       var menu = document.getElementById("langMenu");
       if (!switcher || !toggle || !menu) return;
+
+      function getCurrentSectionHash() {
+        if (window.location.hash) return window.location.hash;
+
+        var sections = Array.from(document.querySelectorAll("main section[id], section[id]"));
+        var scrollPosition = window.scrollY + 140;
+        var currentHash = "";
+
+        sections.forEach(function (section) {
+          if (section.offsetTop <= scrollPosition) {
+            currentHash = "#" + section.id;
+          }
+        });
+
+        return currentHash;
+      }
+
       function close() {
         menu.hidden = true;
         switcher.classList.remove("open");
@@ -618,6 +635,19 @@
         toggle.setAttribute("aria-expanded", "true");
       }
       toggle.addEventListener("click", function () { menu.hidden ? open() : close(); });
+      menu.addEventListener("click", function (e) {
+        var link = e.target.closest("a[href]");
+        var targetUrl;
+        var sectionHash;
+        if (!link) return;
+
+        e.preventDefault();
+        targetUrl = new URL(link.href, window.location.href);
+        sectionHash = getCurrentSectionHash();
+        targetUrl.hash = sectionHash;
+        close();
+        window.location.href = targetUrl.toString();
+      });
       document.addEventListener("click", function (e) { if (!switcher.contains(e.target)) close(); });
       document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
     })();

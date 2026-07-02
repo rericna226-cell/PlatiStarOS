@@ -1650,6 +1650,29 @@
     const langToggle = document.getElementById("langToggle");
     const langMenu = document.getElementById("langMenu");
 
+    function closeLangMenu() {
+      langToggle.setAttribute("aria-expanded", "false");
+      langMenu.hidden = true;
+    }
+
+    function getCurrentSectionHash() {
+      if (window.location.hash) {
+        return window.location.hash;
+      }
+
+      const sections = Array.from(document.querySelectorAll("main section[id], section[id]"));
+      const scrollPosition = window.scrollY + 140;
+      let currentHash = "";
+
+      sections.forEach((section) => {
+        if (section.offsetTop <= scrollPosition) {
+          currentHash = `#${section.id}`;
+        }
+      });
+
+      return currentHash;
+    }
+
     if (langToggle && langMenu) {
       langToggle.addEventListener("click", () => {
         const isOpen = langToggle.getAttribute("aria-expanded") === "true";
@@ -1657,17 +1680,28 @@
         langMenu.hidden = isOpen;
       });
 
+      langMenu.addEventListener("click", (event) => {
+        const link = event.target.closest("a[href]");
+        if (!link) return;
+
+        event.preventDefault();
+        const targetUrl = new URL(link.href, window.location.href);
+        const sectionHash = getCurrentSectionHash();
+
+        targetUrl.hash = sectionHash;
+        closeLangMenu();
+        window.location.href = targetUrl.toString();
+      });
+
       document.addEventListener("click", (event) => {
         if (!event.target.closest(".lang-switcher")) {
-          langToggle.setAttribute("aria-expanded", "false");
-          langMenu.hidden = true;
+          closeLangMenu();
         }
       });
 
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
-          langToggle.setAttribute("aria-expanded", "false");
-          langMenu.hidden = true;
+          closeLangMenu();
         }
       });
     }
