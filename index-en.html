@@ -870,33 +870,19 @@
       accent-color: var(--green-dark);
     }
 
-    .privacy-text {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
+    .privacy span {
       line-height: 1.5;
     }
 
-    .privacy-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 34px;
-      padding: 0 12px;
-      border-radius: 999px;
-      background: rgba(39,95,82,.1);
-      border: 1px solid rgba(39,95,82,.18);
+    .privacy a {
       color: var(--green-dark);
       font-weight: 800;
-      white-space: nowrap;
-      transition: .2s ease;
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
 
-    .privacy-link:hover {
-      background: var(--green-dark);
-      border-color: var(--green-dark);
-      color: white;
+    .privacy a:hover {
+      color: var(--green);
     }
 
     .footer-link {
@@ -1639,9 +1625,8 @@
 
           <label class="privacy">
             <input type="checkbox" name="privacidad" required />
-            <span class="privacy-text">
-              <a class="privacy-link" href="privacy-plati-en.html">Privacy notice</a>
-              <span>I have read and accept the privacy notice and authorize the processing of my data in accordance with the LFPDPPP.</span>
+            <span>
+              I have read and accept the <a href="privacy-plati-en.html">privacy notice</a> and authorize the processing of my data in accordance with the LFPDPPP.
             </span>
           </label>
 
