@@ -633,6 +633,23 @@
       border-bottom: 0;
     }
 
+    .benchmark-swipe-hint {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: fit-content;
+      margin: 0 auto 18px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.82);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
     .proof-cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1078,6 +1095,10 @@
         white-space: nowrap;
       }
 
+      .benchmark-swipe-hint {
+        display: inline-flex;
+      }
+
       .scale-table {
         display: block;
         overflow-x: auto;
@@ -1132,6 +1153,7 @@
     <a href="#aplicaciones">Aplicaciones</a>
     <a href="#evaluacion">Evaluación</a>
     <a href="#contacto">Contacto</a>
+    <a href="/privacy">Privacidad</a>
     <a href="#contacto" class="mobile-cta">Solicitar evaluación</a>
   </div>
 
@@ -1332,6 +1354,11 @@
             La mejora no proviene de aproximar el resultado: ambos motores convergen
             en la misma ruta óptima.
           </p>
+        </div>
+
+        <div class="benchmark-swipe-hint" aria-hidden="true">
+          <span>↔</span>
+          <span>Desliza para ver</span>
         </div>
 
         <table class="benchmark-table">
