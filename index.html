@@ -613,23 +613,21 @@
     .benchmark-scroll::after {
       content: "";
       position: absolute;
-      top: 0;
-      right: 0;
-      width: 74px;
-      height: 100%;
+      inset: 0;
+      border-radius: inherit;
       background: rgba(7,17,31,.28);
-      backdrop-filter: blur(10px);
-      mask-image: linear-gradient(90deg, transparent, #000 42%);
+      backdrop-filter: blur(14px);
       opacity: 0;
       pointer-events: none;
       transition: opacity .25s ease;
+      z-index: 1;
     }
 
     .benchmark-swipe-overlay {
       position: absolute;
       left: 50%;
-      bottom: 14px;
-      transform: translateX(-50%);
+      top: 50%;
+      transform: translate(-50%, -50%);
       display: none;
       align-items: center;
       justify-content: center;
@@ -646,6 +644,7 @@
       pointer-events: none;
       opacity: 0;
       transition: opacity .25s ease;
+      z-index: 2;
     }
 
     .benchmark-scroll.benchmark-hint::after,
@@ -664,6 +663,8 @@
       width: 100%;
       border-collapse: collapse;
       background: transparent;
+      position: relative;
+      z-index: 0;
     }
 
     .benchmark-table th,
